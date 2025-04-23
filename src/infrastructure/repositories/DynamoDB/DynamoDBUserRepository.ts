@@ -10,7 +10,6 @@ import { IUserRepository } from "../../../domain/interfaces/repositories";
 import { User } from "../../../domain/models/users";
 import { toCamelCase, toSnakeCase } from "../../../utils/Formatter";
 import { Errors } from "../../../utils/Errors";
-import { throws } from "assert";
 
 export class DynamoDBUserRepository implements IUserRepository {
   constructor(
@@ -43,7 +42,8 @@ export class DynamoDBUserRepository implements IUserRepository {
 
       const items = result.Items ?? [];
       return toCamelCase<[User]>(items);
-    } catch (error) {
+    } catch (err) {
+      console.log(err);
       throw Errors.InternalServerError();
     }
   };
@@ -62,6 +62,7 @@ export class DynamoDBUserRepository implements IUserRepository {
       );
       return "Success";
     } catch (err) {
+      console.log(err);
       const error = err as Error;
       if (error.name === "ConditionalCheckFailedException") {
         throw Errors.NotFound();
@@ -84,10 +85,12 @@ export class DynamoDBUserRepository implements IUserRepository {
       );
       return "Success";
     } catch (err) {
+      console.log(err);
       const error = err as Error;
       if (error.name === "ConditionalCheckFailedException") {
         throw Errors.Conflict();
       }
+
       throw Errors.InternalServerError();
     }
   };
@@ -101,7 +104,8 @@ export class DynamoDBUserRepository implements IUserRepository {
         })
       );
       return "Success";
-    } catch (error) {
+    } catch (err) {
+      console.log(err);
       throw Errors.InternalServerError();
     }
   };
