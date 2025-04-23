@@ -49,9 +49,11 @@ export class DynamoDBUserRepository implements IUserRepository {
   };
 
   put = async (id: string, item: User): Promise<string> => {
+    console.log(item);
     const marshalled = marshall(toSnakeCase(item), {
       removeUndefinedValues: true,
     });
+    console.log(marshalled);
     try {
       await this.client.send(
         new PutCommand({
