@@ -50,6 +50,6 @@ phases:
           aws lambda delete-function --function-name $FUNCTION_NAME --qualifier $CurrentVersion
         fi
       - echo "Deploying API Gateway"
-      - API_ID=$(aws apigatewayv2 get-apis --query "Items[?Name=='$API_NAME'].ApiId" --output text)
+      - API_ID=$(aws apigatewayv2 get-apis --query "Items[?Name==\`$API_NAME\`].ApiId" --output text)
       - aws apigatewayv2 create-deployment --api-id $API_ID --stage-name $STAGE_NAME
       - echo "Deployment completed for HTTP API $API_ID at stage $STAGE_NAME"
