@@ -1,56 +1,52 @@
-```yml
-version: 0.2
-env:
-  variables:
-    FUNCTION_NAME: "<Lambda関数名>"
-    ALIAS_NAME: "<エイリアス名>"
-    STAGE_NAME: "<ステージ名>"
-    API_NAME: "<APIGageWay名>"
+# My API
 
-phases:
-  install:
-    commands:
-      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-      - unzip -q awscliv2.zip
-      - ./aws/install --install-dir ~/aws-cli --bin-dir ~/bin --update
-      - export PATH=~/bin:$PATH
-      - npm install
-      - npm install -g typescript
+This project is a sample API built using AWS services (API Gateway, Lambda, DynamoDB, CodePipeline) and technologies like TypeScript, Node.js, and Express. The API demonstrates basic database operations with DynamoDB.
 
-  pre_build:
-    commands:
-      - echo No Pre Build phase
+## Features
 
-  build:
-    commands:
-      - echo Build started on `date`
-      - tsc
-      - CurrentVersion=$(aws lambda get-alias --function-name $FUNCTION_NAME --name $ALIAS_NAME --query 'FunctionVersion' --output text)
-      - echo "Zipping deployment package"
-      - mkdir -p deploy-package
-      - cp -r dist/* deploy-package/
-      - cp -r node_modules deploy-package/
-      - cd deploy-package
-      - zip -q -r ../lambda.zip .
-      - cd ..
-      - aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://lambda.zip --debug
-      - sleep 10
+- **API Gateway**: Handles HTTP requests and routes them to Lambda functions.
+- **AWS Lambda**: Executes serverless functions for API logic.
+- **DynamoDB**: NoSQL database for storing and retrieving data.
+- **CodePipeline**: Automates the CI/CD process.
+- **TypeScript**: Ensures type safety in the codebase.
+- **Express**: Simplifies API routing and middleware handling.
 
-  post_build:
-    commands:
-      - echo Build completed on `date`
-      - ls
-      - aws lambda publish-version --function-name $FUNCTION_NAME --description "update version"
-      - TargetVersion=$(aws lambda list-versions-by-function --function-name $FUNCTION_NAME --query 'Versions[-1].Version' --output text)
-      - echo $CurrentVersion
-      - echo $TargetVersion
-      - LC_ALL=C.UTF-8 aws lambda update-alias --function-name $FUNCTION_NAME --name $ALIAS_NAME --function-version $TargetVersion
-      - |
-        if [ "$CurrentVersion" != "$TargetVersion" ]; then
-          aws lambda delete-function --function-name $FUNCTION_NAME --qualifier $CurrentVersion
-        fi
-      - echo "Deploying API Gateway"
-      - API_ID=$(aws apigatewayv2 get-apis --query "Items[?Name=='$API_NAME'].ApiId" --output text)
-      - aws apigatewayv2 create-deployment --api-id $API_ID --stage-name $STAGE_NAME
-      - echo "Deployment completed for HTTP API $API_ID at stage $STAGE_NAME"
-```
+## Prerequisites
+
+- AWS account
+- Node.js installed
+- AWS CLI configured
+- Serverless Framework (optional, for deployment)
+
+## API Endpoints
+
+| Method | Endpoint       | Description          |
+|--------|----------------|----------------------|
+| GET    | `/items`       | Fetch all items      |
+| GET    | `/items/:id`   | Fetch item by ID     |
+| POST   | `/items`       | Create a new item    |
+| PUT    | `/items/:id`   | Update an item       |
+| DELETE | `/items/:id`   | Delete an item       |
+
+## DynamoDB Table Schema
+
+- **Table Name**: `Items`
+- **Primary Key**: `id` (String)
+
+## CI/CD with CodePipeline
+
+1. Push changes to the repository.
+2. CodePipeline automatically builds and deploys the API.
+
+## License
+
+This project is licensed under the MIT License.
+
+## Acknowledgments
+
+- AWS documentation
+- Express.js documentation
+- TypeScript community
+- Serverless Framework
+- Node.js ecosystem
+- DynamoDB best practices
