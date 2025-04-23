@@ -50,15 +50,11 @@ export class DynamoDBUserRepository implements IUserRepository {
 
   put = async (id: string, item: User): Promise<string> => {
     console.log(item);
-    const marshalled = marshall(toSnakeCase(item), {
-      removeUndefinedValues: true,
-    });
-    console.log(marshalled);
     try {
       await this.client.send(
         new PutCommand({
           TableName: this.tableName,
-          Item: marshalled,
+          Item: item,
           ConditionExpression: "attribute_exists(id)",
         })
       );
@@ -81,7 +77,7 @@ export class DynamoDBUserRepository implements IUserRepository {
       await this.client.send(
         new PutCommand({
           TableName: this.tableName,
-          Item: marshalled,
+          Item: item,
           ConditionExpression: "attribute_not_exists(id)",
         })
       );
