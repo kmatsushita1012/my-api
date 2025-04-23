@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@aws-sdk/lib-dynamodb": "^3.789.0",
     "@types/express": "^5.0.1",
     "@vendia/serverless-express": "^4.12.6",
     "aws-sdk": "^2.1692.0",

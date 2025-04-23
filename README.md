@@ -20,13 +20,13 @@ This project is a sample API built using AWS services (API Gateway, Lambda, Dyna
 
 ## API Endpoints
 
-| Method | Endpoint       | Description          |
-|--------|----------------|----------------------|
-| GET    | `/items`       | Fetch all items      |
-| GET    | `/items/:id`   | Fetch item by ID     |
-| POST   | `/items`       | Create a new item    |
-| PUT    | `/items/:id`   | Update an item       |
-| DELETE | `/items/:id`   | Delete an item       |
+| Method | Endpoint     | Description       |
+| ------ | ------------ | ----------------- |
+| GET    | `/items`     | Fetch all items   |
+| GET    | `/items/:id` | Fetch item by ID  |
+| POST   | `/items`     | Create a new item |
+| PUT    | `/items/:id` | Update an item    |
+| DELETE | `/items/:id` | Delete an item    |
 
 ## DynamoDB Table Schema
 
@@ -50,3 +50,9 @@ This project is licensed under the MIT License.
 - Serverless Framework
 - Node.js ecosystem
 - DynamoDB best practices
+
+## memo
+
+### add
+
+npm i @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb
