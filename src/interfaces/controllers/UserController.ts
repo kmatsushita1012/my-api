@@ -1,26 +1,18 @@
-import UserUsecase from "../../application/usecase";
-import IRepository from "../../domain/interfaces/repositories";
-import { User } from "../../domain/models/users";
-import {
-  APIGatewayRequest,
-  parseBody,
-  parseParams,
-  parseQuery,
-  parseUserSub,
-} from "../request";
+import { UserUsecases } from "../../application/usecase/user";
+import { User } from "../../domain/entities/users";
+import { APIGatewayRequest, parseBody, parseParams } from "../request";
 
 import { ApiResponse, errorResponse, successResponse } from "../responses";
 
-export default class DistrictController {
-  constructor(private repository: IRepository) {}
+class UserController {
+  constructor(private usecases: UserUsecases) {}
 
   get = async (req: APIGatewayRequest): Promise<ApiResponse> => {
     try {
       const { id } = parseParams(req, (params) => ({
-        id: params.id!,
+        id: params.id as string,
       }));
-      const usecase = new UserUsecase.get(this.repository.user);
-      const result = await usecase.execute(id);
+      const result = await this.usecases.get.execute(id);
       return successResponse(result);
     } catch (error) {
       console.log(error);
@@ -30,8 +22,7 @@ export default class DistrictController {
 
   getAll = async (req: APIGatewayRequest): Promise<ApiResponse> => {
     try {
-      const usecase = new UserUsecase.getAll(this.repository.user);
-      const result = await usecase.execute();
+      const result = await this.usecases.getAll.execute();
       return successResponse(result);
     } catch (error) {
       console.log(error);
@@ -41,9 +32,8 @@ export default class DistrictController {
 
   post = async (req: APIGatewayRequest): Promise<ApiResponse> => {
     try {
-      const data = parseBody<User>(req);
-      const usecase = new UserUsecase.post(this.repository.user);
-      const result = await usecase.execute(data);
+      const item = parseBody<User>(req);
+      const result = await this.usecases.post.execute(item);
       return successResponse(result);
     } catch (error) {
       console.log(error);
@@ -54,11 +44,10 @@ export default class DistrictController {
   put = async (req: APIGatewayRequest): Promise<ApiResponse> => {
     try {
       const { id } = parseParams(req, (params) => ({
-        id: params.id!,
+        id: params.id as string,
       }));
       const item = parseBody<User>(req);
-      const usecase = new UserUsecase.put(this.repository.user);
-      const result = await usecase.execute(id, item);
+      const result = await this.usecases.put.execute(id, item);
       return successResponse(result);
     } catch (error) {
       console.log(error);
@@ -69,10 +58,9 @@ export default class DistrictController {
   delete = async (req: APIGatewayRequest): Promise<ApiResponse> => {
     try {
       const { id } = parseParams(req, (params) => ({
-        id: params.id!,
+        id: params.id as string,
       }));
-      const usecase = new UserUsecase.delete(this.repository.user);
-      const result = await usecase.execute(id);
+      const result = await this.usecases.delete.execute(id);
       return successResponse(result);
     } catch (error) {
       console.log(error);
@@ -80,3 +68,5 @@ export default class DistrictController {
     }
   };
 }
+
+export default UserController;

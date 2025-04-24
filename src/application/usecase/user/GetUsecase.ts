@@ -1,6 +1,6 @@
-import { IUserRepository } from "../../domain/interfaces/repositories";
-import { User } from "../../domain/models/users";
-import { Errors } from "../../utils/Errors";
+import { IUserRepository } from "../../../domain/interfaces/repositories";
+import { User } from "../../../domain/entities/users";
+import { Errors } from "../../../utils/Errors";
 
 export default class GetUsecase {
   constructor(private repository: IUserRepository) {}

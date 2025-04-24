@@ -5,13 +5,12 @@ import {
   PutCommand,
   ScanCommand,
 } from "@aws-sdk/lib-dynamodb";
-import { marshall } from "@aws-sdk/util-dynamodb";
 import { IUserRepository } from "../../../domain/interfaces/repositories";
-import { User } from "../../../domain/models/users";
+import { User } from "../../../domain/entities/users";
 import { toCamelCase, toSnakeCase } from "../../../utils/Formatter";
 import { Errors } from "../../../utils/Errors";
 
-export class DynamoDBUserRepository implements IUserRepository {
+class DynamoDBUserRepository implements IUserRepository {
   constructor(
     private client: DynamoDBDocumentClient,
     private tableName: string
@@ -48,47 +47,18 @@ export class DynamoDBUserRepository implements IUserRepository {
     }
   };
 
-  put = async (id: string, item: User): Promise<string> => {
-    console.log(item);
+  put = async (item: User): Promise<string> => {
+    const snakedItem = toSnakeCase(item);
     try {
       await this.client.send(
         new PutCommand({
           TableName: this.tableName,
-          Item: item,
+          Item: snakedItem,
           ConditionExpression: "attribute_exists(id)",
         })
       );
       return "Success";
     } catch (err) {
-      console.log(err);
-      const error = err as Error;
-      if (error.name === "ConditionalCheckFailedException") {
-        throw Errors.NotFound();
-      }
-      throw Errors.InternalServerError();
-    }
-  };
-
-  post = async (item: User): Promise<string> => {
-    const marshalled = marshall(toSnakeCase(item), {
-      removeUndefinedValues: true,
-    });
-    try {
-      await this.client.send(
-        new PutCommand({
-          TableName: this.tableName,
-          Item: item,
-          ConditionExpression: "attribute_not_exists(id)",
-        })
-      );
-      return "Success";
-    } catch (err) {
-      console.log(err);
-      const error = err as Error;
-      if (error.name === "ConditionalCheckFailedException") {
-        throw Errors.Conflict();
-      }
-
       throw Errors.InternalServerError();
     }
   };
@@ -108,3 +78,4 @@ export class DynamoDBUserRepository implements IUserRepository {
     }
   };
 }
+export default DynamoDBUserRepository;

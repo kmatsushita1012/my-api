@@ -1,7 +1,7 @@
 import { IUserRepository } from "../../../domain/interfaces/repositories";
-import { User, userSample } from "../../../domain/models/users";
+import { User, userSample } from "../../../domain/entities/users";
 
-export class MockUserRepository implements IUserRepository {
+class MockUserRepository implements IUserRepository {
   constructor() {}
 
   get = async (id: string): Promise<User | null> => {
@@ -12,11 +12,7 @@ export class MockUserRepository implements IUserRepository {
     return [userSample];
   };
 
-  put = async (id: string, item: User): Promise<string> => {
-    return "Success";
-  };
-
-  post = async (item: User): Promise<string> => {
+  put = async (item: User): Promise<string> => {
     return "Success";
   };
 
@@ -24,3 +20,4 @@ export class MockUserRepository implements IUserRepository {
     return "Success";
   };
 }
+export default MockUserRepository;

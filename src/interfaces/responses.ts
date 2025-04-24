@@ -1,32 +1,18 @@
 import { APIError } from "../utils/Errors";
 
 const successResponse = (body: any, status: number = 200): ApiResponse => {
-  try {
-    return {
-      statusCode: status,
-      body: body,
-    };
-  } catch (error) {
-    return {
-      statusCode: 500,
-      body: { error: String(error) },
-    };
-  }
+  return {
+    statusCode: status,
+    body: body,
+  };
 };
 
 const errorResponse = (error: any): ApiResponse => {
   if (error instanceof APIError) {
-    try {
-      return {
-        statusCode: error.statusCode,
-        body: { error: error.message },
-      };
-    } catch (error) {
-      return {
-        statusCode: 500,
-        body: { error: String(error) },
-      };
-    }
+    return {
+      statusCode: error.statusCode,
+      body: { error: error.message },
+    };
   } else {
     return {
       statusCode: 500,

@@ -2,21 +2,26 @@ import express from "express";
 import serverless from "@vendia/serverless-express";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import DynamoDBRepository from "./infrastructure/repositories/DynamoDB";
-import IRepository from "./domain/interfaces/repositories";
-import Controller from "./interfaces/controllers";
-import createRouter from "./infrastructure/router";
-
-const userTableName = "my-api-users";
+import { DynamoDBUserRepository } from "./infrastructure/repositories/DynamoDB";
+import { IUserRepository } from "./domain/interfaces/repositories";
+import { createUsecases } from "./application/usecase/user";
+import { UserController } from "./interfaces/controllers";
+import createRouter from "./interfaces/router";
 //DI
+const userTableName = "my-api-users";
 const dynamoDBClient = new DynamoDBClient({ region: "ap-northeast-1" });
 const client = DynamoDBDocumentClient.from(dynamoDBClient);
-const repository: IRepository = new DynamoDBRepository(client, userTableName);
-export const controllers = new Controller(repository);
+const userRepository: IUserRepository = new DynamoDBUserRepository(
+  client,
+  userTableName
+);
+const usecases = createUsecases(userRepository);
+const controllers = new UserController(usecases);
+const router = createRouter(controllers);
 
 const app = express();
 app.use(express.json());
-app.use(createRouter(controllers));
+app.use(router);
 app.get("/", (req, res) => {
   res.send("Hello");
 });

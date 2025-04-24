@@ -25,18 +25,6 @@ const parseParams = <T>(
   }
 };
 
-const parseUserSub = (req: APIGatewayRequest): string => {
-  try {
-    const sub = req.apiGateway?.event?.requestContext?.authorizer?.claims?.sub;
-    if (!sub) {
-      throw Errors.Unauthorized();
-    }
-    return sub;
-  } catch (error) {
-    throw Errors.InternalServerError(String(error));
-  }
-};
-
 const parseBody = <T>(
   value: Request,
   predicate: (input: any) => T = (input) => {
@@ -50,4 +38,4 @@ const parseBody = <T>(
   }
 };
 
-export { APIGatewayRequest, parseQuery, parseParams, parseBody, parseUserSub };
+export { APIGatewayRequest, parseQuery, parseParams, parseBody };
