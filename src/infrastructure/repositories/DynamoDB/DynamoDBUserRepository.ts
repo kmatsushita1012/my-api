@@ -26,8 +26,8 @@ class DynamoDBUserRepository implements IUserRepository {
       );
       if (!result.Item) return null;
       return toCamelCase<User>(result.Item);
-    } catch (error) {
-      throw Errors.InternalServerError();
+    } catch (err) {
+      throw Errors.InternalServerError(err as string);
     }
   };
 
@@ -42,8 +42,7 @@ class DynamoDBUserRepository implements IUserRepository {
       const items = result.Items ?? [];
       return toCamelCase<[User]>(items);
     } catch (err) {
-      console.log(err);
-      throw Errors.InternalServerError();
+      throw Errors.InternalServerError(err as string);
     }
   };
 
@@ -54,12 +53,11 @@ class DynamoDBUserRepository implements IUserRepository {
         new PutCommand({
           TableName: this.tableName,
           Item: snakedItem,
-          ConditionExpression: "attribute_exists(id)",
         })
       );
       return "Success";
     } catch (err) {
-      throw Errors.InternalServerError();
+      throw Errors.InternalServerError(err as string);
     }
   };
 
@@ -73,8 +71,7 @@ class DynamoDBUserRepository implements IUserRepository {
       );
       return "Success";
     } catch (err) {
-      console.log(err);
-      throw Errors.InternalServerError();
+      throw Errors.InternalServerError(err as string);
     }
   };
 }
