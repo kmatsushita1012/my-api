@@ -7,8 +7,8 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { IUserRepository } from "../../../domain/interfaces/repositories";
 import { User } from "../../../domain/entities/users";
-import { toCamelCase, toSnakeCase } from "../../../utils/Formatter";
 import { Errors } from "../../../utils/Errors";
+import { toCamelCase, toSnakeCase } from "../formatter";
 
 class DynamoDBUserRepository implements IUserRepository {
   constructor(

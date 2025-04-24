@@ -7,7 +7,7 @@ import { IUserRepository } from "./domain/interfaces/repositories";
 import { createUsecases } from "./application/usecase/user";
 import { UserController } from "./interfaces/controllers";
 import createRouter from "./interfaces/router";
-//DI
+//依存関係の注入(DI)
 const userTableName = "my-api-users";
 const dynamoDBClient = new DynamoDBClient({ region: "ap-northeast-1" });
 const client = DynamoDBDocumentClient.from(dynamoDBClient);
@@ -18,7 +18,7 @@ const userRepository: IUserRepository = new DynamoDBUserRepository(
 const usecases = createUsecases(userRepository);
 const controllers = new UserController(usecases);
 const router = createRouter(controllers);
-
+// 初期化
 const app = express();
 app.use(express.json());
 app.use(router);

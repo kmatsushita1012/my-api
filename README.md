@@ -18,6 +18,8 @@ This project is a sample API built using AWS services (API Gateway, Lambda, Dyna
 - AWS CLI configured
 - Serverless Framework (optional, for deployment)
 
+
+
 ## API Endpoints
 
 | Method | Endpoint     | Description       |

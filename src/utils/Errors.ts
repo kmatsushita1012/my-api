@@ -17,4 +17,4 @@ export const Errors = {
   InternalServerError: (msg = "Internal Server Error") =>
     new APIError(500, msg),
   NotImplemented: (msg = "Not Implemented") => new APIError(501, msg),
-} as const;
+};
