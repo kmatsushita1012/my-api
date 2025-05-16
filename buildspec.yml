@@ -10,8 +10,6 @@ env:
 
 phases:
   install:
-    runtime-versions:
-      nodejs: 22
     commands:
       - npm ci
 
