@@ -25,6 +25,7 @@ phases:
       - cd ..
       - echo "Updating Lambda function code"
       - aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://lambda.zip
+      - sleep 10
 
   post_build:
     commands:
