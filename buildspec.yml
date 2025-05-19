@@ -27,7 +27,7 @@ phases:
       - cd ..
       - ls -l
       - echo UnZipped
-      - unzip lambda.zip -d lambda-unpacked
+      - unzip -q lambda.zip -d lambda-unpacked
       - ls -lh lambda-unpacked
       - echo "Updating Lambda function code"
       - aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://lambda.zip
