@@ -1,5 +1,4 @@
 version: 0.2
-#バックエンドのみCodePipeLineでビルド
 
 env:
   variables:
@@ -12,9 +11,14 @@ phases:
   install:
     commands:
       - npm ci
+      - pwd
+      - cd src
+      - pwd
 
   build:
     commands:
+      - pwd
+      - ls
       - echo Build started on `date`
       - ./node_modules/.bin/tsc
       - mkdir -p deploy-package
